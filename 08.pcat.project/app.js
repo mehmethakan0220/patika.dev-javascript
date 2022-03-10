@@ -1,26 +1,31 @@
+const fileUpload = require('express-fileupload');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const ejs = require('ejs');
-const multiparty = require('multiparty');
+const fs = require('fs');
 
 
+// listening port
 const port = 3000;
-
 const app = express();
 
 const DB = require('./db/DbConnSettings');
 const Photo = require('./models/Photo');
 
+// connect to db
 DB.ConnectToMongo();
 
+//middlewares
 app.use(cors());
+app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-
 app.use(express.urlencoded({ extended: true }))
-// app.use(express.json());
+app.use(fileUpload({createParentPath:true}));
 
+
+//routes
 app.get("/", async (req, res) => {
     const photos = await Photo.getAllPhotos();
     res.render('index', {
@@ -47,33 +52,36 @@ app.get("/videos", (req, res) => {
     res.render('video')
 })
 
-
 app.post("/add", (req, res) => {
 
-    //application/x-www-form-urlencoded
-    // console.log(req.headers)
-    const ct = req.headers['content-type'];
-    // console.log(ct)
-    if (ct === 'application/x-www-form-urlencoded') {
-        Photo.addPhoto(req.body);
-    } else if (ct.search("multipart/form-data") == 0) {
+        if(!req.files){
+            return res.status(404).send("No file were uploaded!")
+        }
 
-        var form = new multiparty.Form();
-        form.parse(req, (err, fields, files) => {
-            if (!err) {
-                console.log("err=", err)
-                console.log("fields=", fields)
-                console.log("files=", files)
+        let file = req.files.image;
+        let uploadPath = __dirname + '/public/uploads/' + file.name;
 
-                // for (const item of files.file) {
-                //     console.log(item.path)
-                // }
-            }
-        })
-    }
+        file.mv(uploadPath,async ()=>{
+            await Photo.addPhoto({
+                ...req.body,
+                image: "/uploads/" + file.name
+            })
+        });
 
-    res.redirect("/add")
+    res.redirect("/")
 })
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/photos/:id", async (req, res) => {
 

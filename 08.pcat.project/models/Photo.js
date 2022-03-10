@@ -22,6 +22,11 @@ async function getAllPhotos(){
     return result;
 }
 
+async function getPhotoById(id){
+    const result = await PhotoModel.findOne({_id:id});
+    return result;
+}
+
 function updatePhoto(object){
     PhotoModel.updateOne()
 }
@@ -30,5 +35,6 @@ function updatePhoto(object){
 
 module.exports = {
     addPhoto,
-    getAllPhotos
+    getAllPhotos,
+    getPhotoById
 }
