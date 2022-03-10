@@ -1,27 +1,42 @@
 <%- include('./partials/_header') %>
 
-<body>
+  <body>
     <div class="container">
-        <div class="row">
-          <div class="col">
-            <%= photo.title %>
-          </div>
+      <div class="row">
 
-        </div>
         <div class="row">
-          <div class="col">
-            <%= photo.description %>
+          <div class="col-12 m-5">
+            <img src="<%= photo.image %>" alt="image">
           </div>
 
         </div>
 
         <div class="row">
-            <div class="col">
-              <img src="<%= photo.image %>" alt="image">
+          <div class="col-10 mt-5">
+            <p>Title: <%= photo.title %></p>
+            <p>Description: <%= photo.description %></p>
+          </div>
+          <div class="col-2 mt-5">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a href="/edit/<%=photo.id %>" type="button" class="btn btn-secondary red">Edit</a>
+
+              <a href="/delete/<%=photo.id %>" type="button"  class="btn btn-secondary">Delete</a>
             </div>
-  
           </div>
-      </div>
-</body>
 
-<%- include('./partials/_footer') %>
+          
+
+
+        </div>
+
+
+
+ 
+
+      </div>
+
+
+    </div>
+  </body>
+
+  <%- include('./partials/_footer') %>

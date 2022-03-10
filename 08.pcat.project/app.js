@@ -61,7 +61,7 @@ app.post("/add", (req, res) => {
         let file = req.files.image;
         let uploadPath = __dirname + '/public/uploads/' + file.name;
 
-        file.mv(uploadPath,async ()=>{
+        file.mv(uploadPath, async ()=>{
             await Photo.addPhoto({
                 ...req.body,
                 image: "/uploads/" + file.name
@@ -72,22 +72,24 @@ app.post("/add", (req, res) => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
 app.get("/photos/:id", async (req, res) => {
-
     const photo = await Photo.getPhotoById(req.params.id);
-    // console.log(photo)
     res.render('photoDetail', {photo})
+})
+
+app.get("/edit/:id", async (req,res)=>{
+    const photo = await Photo.getPhotoById(req.params.id);
+    res.render('edit', {photo})
+})
+
+app.post("/edit/:id", async(req,res)=>{
+    await Photo.updatePhoto(req.body,req.params.id);
+    res.redirect("/photos/".concat(req.params.id))
+})
+
+app.get("/delete/:id", async(req,res)=>{
+    await Photo.deleteById(req.params.id);
+    res.redirect("/");
 })
 
 app.listen(port, console.log(`Server Listening on Port:${port}`));

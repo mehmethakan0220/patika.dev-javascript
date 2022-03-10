@@ -13,22 +13,24 @@ const PhotoSchema = new mongoose.Schema({
 const PhotoModel = mongoose.model('photo',PhotoSchema)
 
 
-function addPhoto(object){
-    PhotoModel.create(object);
+async function addPhoto(object){
+   return await PhotoModel.create(object);
 }
 
 async function getAllPhotos(){
-    const result = await PhotoModel.find({}).sort("-date")
-    return result;
+    return await PhotoModel.find({}).sort("-date")
 }
 
 async function getPhotoById(id){
-    const result = await PhotoModel.findOne({_id:id});
-    return result;
+    return await PhotoModel.findOne({_id:id});
 }
 
-function updatePhoto(object){
-    PhotoModel.updateOne()
+async function deleteById(id){
+    return await PhotoModel.deleteOne({_id:id});
+}
+
+async function updatePhoto(object,id){
+  const result = await PhotoModel.updateOne({_id:id},{title:object.title,description:object.description})
 }
 
 
@@ -36,5 +38,7 @@ function updatePhoto(object){
 module.exports = {
     addPhoto,
     getAllPhotos,
-    getPhotoById
+    getPhotoById,
+    updatePhoto,
+    deleteById
 }
