@@ -18,7 +18,7 @@ function addPhoto(object){
 }
 
 async function getAllPhotos(){
-    const result = await PhotoModel.find({});
+    const result = await PhotoModel.find({}).sort("-date")
     return result;
 }
 
