@@ -20,7 +20,7 @@
             <div class="btn-group" role="group" aria-label="Basic example">
               <a href="/edit/<%=photo.id %>" type="button" class="btn btn-secondary red">Edit</a>
 
-              <a href="/delete/<%=photo.id %>" type="button"  class="btn btn-secondary">Delete</a>
+              <a href="/delete/<%=photo.id %>" type="button" onclick="return confirm('Silmek istediğinize emin misiniz?')" class="btn btn-secondary">Delete</a>
             </div>
           </div>
 
